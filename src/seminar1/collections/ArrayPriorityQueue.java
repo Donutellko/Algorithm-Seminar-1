@@ -1,34 +1,43 @@
 package seminar1.collections;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 
 public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorityQueue<Key> {
 
+    private static final int DEFAULT_CAPACITY = 16;
+
     private Key[] elementData;
     private Comparator<Key> comparator;
+    private int size;
 
+    @SuppressWarnings("unchecked")
     public ArrayPriorityQueue() {
-        /* TODO: implement it — O(n) */
+        elementData = (Key[]) new Object[DEFAULT_CAPACITY];
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayPriorityQueue(Comparator<Key> comparator) {
-        /* TODO: implement it — O(n) */
+        elementData = (Key[]) new Object[DEFAULT_CAPACITY];
         this.comparator = comparator;
     }
 
     @Override
     public void add(Key key) {
-        /* TODO: implement it — O(log n) */
+        grow();
+
     }
 
     @Override
     public Key peek() {
         /**
-         * TODO: implement it — O(1)
          * Посмотреть на минимальный элемент
          */
-        return null;
+        if (isEmpty()) {
+            return null;
+        }
+        return elementData[0];
     }
 
     @Override
@@ -38,19 +47,18 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
          * Достать минимальный элемент
          *  и перестроить кучу
          */
+        shrink();
         return null;
     }
 
     @Override
     public boolean isEmpty() {
-        /* TODO: implement it */
-        return false;
+        return size == 0;
     }
 
     @Override
     public int size() {
-        /* TODO: implement it */
-        return 0;
+        return size;
     }
 
     private void siftUp() {
@@ -63,7 +71,7 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
 
     private void siftDown() {
         /**
-         * TODO: implement it — O(log n)
+         * TODO: implement it — O(log n)
          * Просеивание вниз
          *  спуск элемента меньше детей
          */
@@ -71,18 +79,24 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
 
     private void grow() {
         /**
-         * TODO: implement it
          * Если массив заполнился,
          * то увеличить его размер в полтора раз
          */
+        if (size == elementData.length - 1) {
+            int newCapacity = elementData.length + elementData.length / 2;
+            elementData = Arrays.copyOf(elementData, newCapacity);
+        }
     }
 
     private void shrink() {
         /**
-         * TODO: implement it
          * Если количество элементов в четыре раза меньше,
          * то уменьшить его размер в два раза
          */
+        if (size * 4 <= elementData.length) {
+            int newCapacity = elementData.length / 2;
+            elementData = Arrays.copyOf(elementData, newCapacity);
+        }
     }
 
     private boolean greater(int i, int j) {
